@@ -50,5 +50,3 @@ export class AppModule {
 
 ```
 #### Note: The UserProfile Service is application specific. You can replace the API call there with an API of your own that uses OAuth for Authentication
-# Angular Examples for using Identity Server
-Provides examples in Angular for how to interface with identity server
