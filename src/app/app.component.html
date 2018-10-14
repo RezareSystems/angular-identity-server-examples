@@ -1,0 +1,6 @@
+<ng-container *ngIf="moduleSetup">
+  <button [disabled]="(isAuthorized$ | async)" type="button" (click)="login()">Log In</button>
+  <button [disabled]="!(isAuthorized$ | async)" type="button" (click)="logout()">Log Out</button><br />
+  <span *ngIf="userData$ | async as userData">Hello {{ userData.email }}</span>
+  <router-outlet></router-outlet>
+</ng-container>
