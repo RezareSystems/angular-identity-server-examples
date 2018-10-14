@@ -49,3 +49,4 @@ export class AppModule {
 }
 
 ```
+#### Note: The UserProfile Service is application specific. You can replace the API call there with an API of your own that uses OAuth for Authentication
