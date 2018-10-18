@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   OidcSecurityService,
-  AuthorizationResult
+  AuthorizationResult,
+  AuthorizationState,
+  ValidationResult,
 } from "angular-auth-oidc-client";
 import { Subscription, Observable } from "rxjs";
 import { filter, take, mergeMap } from "rxjs/operators";
@@ -64,6 +66,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   login() {
+    localStorage.setItem('fromLogin', 'true');
     this.oidcSecurityService.authorize();
   }
 
@@ -72,26 +75,24 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   private onAuthorizationResult(authorizationResult: AuthorizationResult) {
-    if (authorizationResult === AuthorizationResult.authorized) {
+    if (authorizationResult.authorizationState === AuthorizationState.authorized) {
       this.userService.loadUserProfile().subscribe(() => {
-        const fromSilentRenew = localStorage.getItem("fromSilentRenew");
-        if (fromSilentRenew == null) {
-          console.log("### onAuthorizationResult after login");
+        const fromLogin = localStorage.getItem("fromLogin");
+        if (fromLogin == null) {
+          console.log("### onAuthorizationResult from silent renew");
+        } else if (fromLogin == "true") {
+          console.log("### onAuthorizationResult from login");
+          localStorage.removeItem("fromLogin");
           this.redirectToGoingTo();
-        } else if (fromSilentRenew == "true") {
-          console.log("### onAuthorizationResult after silent_renew");
         }
-        localStorage.removeItem("fromSilentRenew");
       });
-    } else {
-      localStorage.removeItem("fromSilentRenew");
     }
   }
 
   private onCheckSessionChanged(isAuthorized: boolean) {
-    console.log('### onCheckSessionChanged', isAuthorized);
     if(isAuthorized) {
       if (window.parent) {
+        console.log('### onCheckSessionChanged', isAuthorized);
         // Need to re-route like this because this event is sent from the check session iframe
         window.parent.location.href = '/logout-redirect';
       }

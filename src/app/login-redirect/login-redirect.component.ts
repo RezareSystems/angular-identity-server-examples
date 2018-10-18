@@ -11,6 +11,7 @@ export class LoginRedirectComponent implements OnInit {
   constructor(private oidcSecurityService: OidcSecurityService) { }
 
   ngOnInit() {
+    localStorage.setItem('fromLogin', 'true');
     this.oidcSecurityService.authorize();
   }
 

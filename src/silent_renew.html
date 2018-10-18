@@ -23,9 +23,6 @@
       var event = document.createEvent("CustomEvent");
       event.initCustomEvent('oidc-silent-renew-message', false, false, window.location.hash.substr(1));
       parent.dispatchEvent(event);
-
-      // set fromSilentRenew flag on localStorage to true so app would know
-      localStorage.setItem('fromSilentRenew', 'true');
     };
   </script>
 </body>
